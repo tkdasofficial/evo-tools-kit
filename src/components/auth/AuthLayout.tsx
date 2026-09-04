@@ -39,7 +39,9 @@ export function AuthLayout({
             <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{subtitle}</p>
           </div>
 
-          {children}
+          <div className="mt-7 rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
+            {children}
+          </div>
 
           <div className="mt-8 text-center text-xs text-muted-foreground">
             {footer ?? (

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, User } from "lucide-react";
-import { BrandMark } from "./BrandMark";
+import { Menu } from "lucide-react";
+import { ProfileMenu } from "./ProfileMenu";
 
 export function AppHeader({
   onMenuClick,
@@ -26,21 +26,14 @@ export function AppHeader({
             {title}
           </h2>
         ) : (
-          <Link to="/" className="flex min-w-0 flex-1 items-center gap-2 px-1">
-            <BrandMark />
+          <Link to="/" className="flex min-w-0 flex-1 items-center px-1">
             <span className="font-display truncate text-[15px] font-semibold tracking-tight">
               Hyper Cluster
             </span>
           </Link>
         )}
 
-        <Link
-          to="/auth/signup"
-          aria-label="Sign up or sign in"
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-accent active:bg-accent"
-        >
-          <User className="size-[18px]" strokeWidth={2} />
-        </Link>
+        <ProfileMenu />
       </div>
     </header>
   );
