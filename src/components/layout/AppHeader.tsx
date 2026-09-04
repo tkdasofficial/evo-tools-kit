@@ -7,7 +7,7 @@ export function AppHeader({
   title,
 }: {
   onMenuClick: () => void;
-  title?: string;
+  title?: string | undefined;
 }) {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
