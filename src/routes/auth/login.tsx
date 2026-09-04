@@ -72,7 +72,7 @@ function LoginPage() {
               to="/auth/forgot-password"
               className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
-              Forgot?
+              Forgot Password
             </Link>
           }
         >
