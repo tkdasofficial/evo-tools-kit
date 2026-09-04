@@ -56,14 +56,14 @@ function ForgotPasswordPage() {
       }
     >
       {sent ? (
-        <div className="mt-7 rounded-xl border border-border bg-card p-5 text-center shadow-sm">
+        <div className="text-center">
           <p className="text-[13px] font-medium">Check your inbox</p>
           <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
             If an account exists for that address, a reset link is on its way.
           </p>
         </div>
       ) : (
-        <form onSubmit={submit} className="mt-7 space-y-4">
+        <form onSubmit={submit} className="space-y-4">
           <Field label="Email">
             <input
               type="email"

@@ -54,7 +54,7 @@ function LoginPage() {
         </span>
       }
     >
-      <form onSubmit={submit} className="mt-7 space-y-4">
+      <form onSubmit={submit} className="space-y-4">
         <Field label="Email">
           <input
             type="email"
