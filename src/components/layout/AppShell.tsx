@@ -3,7 +3,7 @@ import { AppHeader } from "./AppHeader";
 import { AppDrawer } from "./AppDrawer";
 import { AppFooter } from "./AppFooter";
 
-export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
+export function AppShell({ children, title }: { children: ReactNode; title?: string | undefined }) {
   const [open, setOpen] = useState(false);
 
   return (
