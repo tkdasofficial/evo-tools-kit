@@ -26,7 +26,7 @@ function ToolPage() {
   const { slug } = Route.useParams();
   const tool = getTool(slug)!;
   return (
-    <AppShell>
+    <AppShell title={tool.name}>
       <ToolWorkspace tool={tool} />
     </AppShell>
   );
