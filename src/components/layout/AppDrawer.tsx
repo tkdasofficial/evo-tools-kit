@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { X, LayoutGrid } from "lucide-react";
+import { X, LayoutGrid, Tag, HelpCircle, Shield, ScrollText } from "lucide-react";
 import { tools, toolGroups } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 import { BrandMark } from "./BrandMark";
