@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { UploadCloud, Download, Copy, Trash2, FileCheck2, Check, ChevronDown } from "lucide-react";
 import type { Tool, ToolSetting } from "@/lib/tools";
+import { getToolContent } from "@/lib/tool-content";
 import { cn } from "@/lib/utils";
 
 export function ToolWorkspace({ tool }: { tool: Tool }) {
@@ -12,7 +13,7 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
       tool.settings.map((s) => [s.key, s.defaultValue as number | boolean | string]),
     ),
   );
-  const Icon = tool.icon;
+  const content = getToolContent(tool.slug);
 
   const setValue = (key: string, value: number | boolean | string) =>
     setValues((v) => ({ ...v, [key]: value }));
@@ -23,20 +24,8 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-5">
-      {/* Header */}
-      <header className="flex items-center gap-3.5">
-        <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card shadow-sm">
-          <Icon className="size-5" strokeWidth={1.75} />
-        </span>
-        <div className="min-w-0">
-          <h1 className="truncate text-lg font-semibold leading-tight tracking-tight sm:text-xl">
-            {tool.name}
-          </h1>
-          <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
-            {tool.description}
-          </p>
-        </div>
-      </header>
+      {/* Page title lives in the app header; the workspace opens straight into the tool. */}
+      <h1 className="sr-only">{tool.name}</h1>
 
       {/* Feature highlights */}
       <ul className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border bg-border shadow-sm sm:grid-cols-3">
@@ -139,6 +128,56 @@ export function ToolWorkspace({ tool }: { tool: Tool }) {
               onClick={() => setFile(null)}
             />
           </div>
+        </div>
+      </section>
+
+      {/* Guide — below the working area */}
+      <section className="rounded-xl border border-border bg-card shadow-sm">
+        <div className="border-b border-border px-5 py-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            How to use {tool.name}
+          </h2>
+        </div>
+        <ol className="divide-y divide-border">
+          {content.steps.map((step, i) => (
+            <li key={step} className="flex gap-3 px-5 py-3.5">
+              <span className="mt-px inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-border bg-background text-[11px] font-semibold tabular-nums">
+                {i + 1}
+              </span>
+              <p className="text-[13px] leading-relaxed text-muted-foreground">{step}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="border-t border-border px-5 py-4">
+          <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Tips
+          </h3>
+          <ul className="mt-2 space-y-1.5">
+            {content.tips.map((tip) => (
+              <li
+                key={tip}
+                className="flex gap-2 text-[13px] leading-relaxed text-muted-foreground"
+              >
+                <Check className="mt-1 size-3.5 shrink-0 text-foreground" strokeWidth={2.25} />
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Description — last */}
+      <section className="rounded-xl border border-border bg-card px-5 py-5 shadow-sm">
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          About this tool
+        </h2>
+        <p className="mt-2 text-sm font-medium leading-snug">{tool.description}</p>
+        <div className="mt-3 space-y-3">
+          {content.about.map((paragraph) => (
+            <p key={paragraph} className="text-[13px] leading-relaxed text-muted-foreground">
+              {paragraph}
+            </p>
+          ))}
         </div>
       </section>
     </div>
@@ -256,52 +295,35 @@ function SelectMenu({
     <div ref={rootRef} className="relative">
       <button
         type="button"
-        aria-haspopup="listbox"
-        aria-expanded={open}
         aria-label={label}
+        aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={cn(
-          "inline-flex h-9 min-w-44 items-center justify-between gap-2 rounded-lg border border-border bg-background px-3 text-[13px] font-medium text-foreground shadow-sm transition-colors hover:bg-accent",
-          open && "border-foreground/40",
-        )}
+        className="inline-flex h-9 min-w-40 items-center justify-between gap-2 rounded-lg border border-border bg-background px-3 text-[13px] font-medium transition-colors hover:bg-accent"
       >
         <span className="truncate">{value}</span>
-        <ChevronDown
-          className={cn("size-3.5 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
-        />
+        <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} />
       </button>
-
       {open && (
-        <div
-          role="listbox"
-          aria-label={label}
-          className="absolute right-0 z-50 mt-1.5 w-full min-w-44 overflow-hidden rounded-lg border border-border bg-popover p-1 shadow-lg"
-        >
-          {options.map((option) => {
-            const selected = option === value;
-            return (
+        <ul className="absolute right-0 z-30 mt-1.5 w-56 overflow-hidden rounded-lg border border-border bg-popover py-1 shadow-lg">
+          {options.map((option) => (
+            <li key={option}>
               <button
-                key={option}
                 type="button"
-                role="option"
-                aria-selected={selected}
                 onClick={() => {
                   onChange(option);
                   setOpen(false);
                 }}
                 className={cn(
-                  "flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-2 text-left text-[13px] transition-colors",
-                  selected
-                    ? "bg-accent font-medium text-foreground"
-                    : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
+                  "flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-[13px] transition-colors hover:bg-accent",
+                  option === value ? "font-medium" : "text-muted-foreground",
                 )}
               >
                 <span className="truncate">{option}</span>
-                {selected && <Check className="size-3.5 shrink-0" strokeWidth={2.25} />}
+                {option === value && <Check className="size-3.5 shrink-0" strokeWidth={2.5} />}
               </button>
-            );
-          })}
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
@@ -323,9 +345,9 @@ function ActionButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg px-3.5 text-[13px] font-medium shadow-sm transition-colors sm:flex-none",
+        "inline-flex h-9 items-center gap-2 rounded-lg px-3.5 text-[13px] font-medium transition-colors",
         primary
-          ? "bg-primary text-primary-foreground hover:opacity-90"
+          ? "bg-primary text-primary-foreground shadow-sm hover:opacity-90"
           : "border border-border bg-background text-foreground hover:bg-accent",
       )}
     >
