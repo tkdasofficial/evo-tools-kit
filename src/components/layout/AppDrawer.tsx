@@ -93,6 +93,29 @@ export function AppDrawer({ open, onClose }: { open: boolean; onClose: () => voi
               </ul>
             </div>
           ))}
+          <div className="mt-6 border-t border-sidebar-border pt-4">
+            <p className="px-3 pb-2 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+              Company
+            </p>
+            <ul className="space-y-0.5">
+              {[
+                { to: "/pricing", label: "Pricing", icon: <Tag className="size-4" /> },
+                { to: "/faq", label: "FAQ", icon: <HelpCircle className="size-4" /> },
+                { to: "/privacy", label: "Privacy Policy", icon: <Shield className="size-4" /> },
+                { to: "/terms", label: "Terms of Service", icon: <ScrollText className="size-4" /> },
+              ].map((item) => (
+                <li key={item.to}>
+                  <NavItem
+                    to={item.to}
+                    active={pathname === item.to}
+                    onClick={onClose}
+                    icon={item.icon}
+                    label={item.label}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       </aside>
     </>
